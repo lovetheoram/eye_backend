@@ -1,16 +1,49 @@
+import logging
+
 from exponent_server_sdk import (
     PushClient,
     PushMessage
 )
 
+from app.notifications.templates import (
+    generate_title
+)
+
+logger = logging.getLogger(__name__)
+
 
 def deliver_notification(
     expo_push_token: str,
-    message: str
+    message: str,
+    notification_type=None,
+    session_config=None
 ):
+    """
+    Delivers a high-priority push notification
+    via Expo. Includes title, priority, channel,
+    and auto-launch routing data for the client.
+    """
 
     if not expo_push_token:
         return False
+
+    # Generate contextual title
+    title = "👁️ Eye Buddy"
+    if notification_type:
+        title = generate_title(
+            notification_type
+        )
+
+    # Build notification data payload
+    data = {
+        "screen": "focal_isolation",
+        "auto_launch": True
+    }
+
+    if session_config:
+        data["session_config"] = (
+            session_config
+        )
 
     try:
 
@@ -19,41 +52,48 @@ def deliver_notification(
             PushMessage(
                 to=expo_push_token,
 
+                title=title,
+
                 body=message,
 
                 sound="default",
 
-                data={
-                    "screen": "regulation"
-                }
+                priority="high",
+
+                channel_id="strain_alerts",
+
+                data=data
             )
         )
-        print(response,"  message sent successfull.")
+
+        logger.info(
+            "push_notification_sent",
+            extra={
+                "token": (
+                    expo_push_token[:20]
+                    + "..."
+                ),
+                "type": (
+                    notification_type.value
+                    if notification_type
+                    else "unknown"
+                )
+            }
+        )
+
         return response.is_success()
 
     except Exception as e:
 
-        print(
-            f"Push notification failed: {e}"
+        logger.error(
+            "push_notification_failed",
+            extra={
+                "error": str(e),
+                "token": (
+                    expo_push_token[:20]
+                    + "..."
+                )
+            }
         )
 
         return False
-
-
-# def deliver_notification(
-#     message: str
-# ):
-
-#     """
-#     Placeholder for:
-#     - Firebase Push
-#     - Android Local Notification
-#     - Email
-#     - Future wearable delivery
-#     """
-
-#     print(
-#         f"Delivering Notification: {message}"
-#     )
-
-#     return True

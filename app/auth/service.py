@@ -1,3 +1,5 @@
+import logging
+
 from sqlalchemy.orm import Session
 
 from app.auth.models import User
@@ -11,6 +13,8 @@ from app.core.security import (
     verify_password,
     create_access_token
 )
+
+logger = logging.getLogger(__name__)
 
 
 def get_user_by_email(
@@ -44,21 +48,17 @@ def register_user(
 
     new_user = User(
         name=user_data.name,
-
         email=user_data.email,
-
         password_hash=hashed_password,
-
         work_type=user_data.work_type
     )
 
     db.add(new_user)
-
     db.commit()
-
     db.refresh(new_user)
 
     return new_user
+
 
 def login_user(
     db: Session,
@@ -67,28 +67,10 @@ def login_user(
     expo_push_token: str | None = None
 ):
 
-    print("INSIDE LOGIN USER")
-
-    print("EMAIL:", email)
-
-    print("PASSWORD:", password)
-
-    print(
-        "EXPO TOKEN:",
-        expo_push_token
-    )
-
-    user = get_user_by_email(
-        db,
-        email
-    )
-
-    print("USER:", user)
+    user = get_user_by_email(db, email)
 
     if not user:
-
-        print("USER NOT FOUND")
-
+        logger.warning("login_failed: user not found", extra={"email": email})
         return None
 
     valid_password = verify_password(
@@ -96,27 +78,12 @@ def login_user(
         user.password_hash
     )
 
-    print(
-        "PASSWORD VALID:",
-        valid_password
-    )
-
     if not valid_password:
-
-        print("INVALID PASSWORD")
-
+        logger.warning("login_failed: invalid password", extra={"email": email})
         return None
 
     if expo_push_token:
-
-        print(
-            "UPDATING EXPO TOKEN"
-        )
-
-        user.expo_push_token = (
-            expo_push_token
-        )
-
+        user.expo_push_token = expo_push_token
         db.commit()
 
     token = create_access_token({

@@ -42,5 +42,18 @@ REGULATION_MODE_DETAILS = {
             "exposure briefly."
         ),
         "recommended_duration": 90
+    },
+
+    "focal_isolation": {
+        "title": (
+            "Focal Isolation Chamber"
+        ),
+        "description": (
+            "20-second forced eye movement "
+            "reset with neon tracking dot."
+        ),
+        "recommended_duration": 20,
+        "locked_duration": True,
+        "auto_triggered": True
     }
 }

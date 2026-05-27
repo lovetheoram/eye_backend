@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from app.auth.models import User
 from app.telemetry.models import TelemetryLog
@@ -13,7 +13,7 @@ def get_active_users(db):
     is older than X minutes
     """
 
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
 
     target_cutoff = (
         now - timedelta(

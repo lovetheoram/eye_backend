@@ -1,22 +1,50 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from app.notifications.models import (
     NotificationLog
 )
 
 
-MAX_NOTIFICATIONS_PER_DAY = 3
+# Workday cadence: ~1 notification per hour
+MAX_NOTIFICATIONS_PER_DAY = 8
 
-COOLDOWN_HOURS = 2
+# Interval for ciliary strain notification checks
+COOLDOWN_MINUTES = 30
 
 
 def can_send_notification(
     db,
-    user_id
+    user_id,
+    adaptive_threshold=None
 ):
+    """
+    Checks whether a notification can be sent.
 
-    now = datetime.utcnow()
+    Respects:
+    1. Daily cap (default 8, ~workday hours)
+    2. Per-notification cooldown (default 55min)
+    3. Optional adaptive threshold from
+       behavioral profile
+    """
 
+    now = datetime.now(timezone.utc)
+
+    # Use adaptive cooldown if available,
+    # otherwise fall back to default
+    cooldown = COOLDOWN_MINUTES
+    daily_cap = MAX_NOTIFICATIONS_PER_DAY
+
+    if adaptive_threshold:
+        cooldown = adaptive_threshold.get(
+            "cooldown_minutes",
+            COOLDOWN_MINUTES
+        )
+        daily_cap = adaptive_threshold.get(
+            "daily_cap",
+            MAX_NOTIFICATIONS_PER_DAY
+        )
+
+    # Check daily cap
     recent_notifications = db.query(
         NotificationLog
     ).filter(
@@ -28,10 +56,11 @@ def can_send_notification(
 
     if (
         len(recent_notifications)
-        >= MAX_NOTIFICATIONS_PER_DAY
+        >= daily_cap
     ):
         return False
 
+    # Check cooldown since last notification
     latest = db.query(
         NotificationLog
     ).filter(
@@ -44,7 +73,7 @@ def can_send_notification(
 
         if latest.created_at >= (
             now - timedelta(
-                hours=COOLDOWN_HOURS
+                minutes=cooldown
             )
         ):
             return False

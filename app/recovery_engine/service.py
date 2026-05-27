@@ -43,21 +43,28 @@ def create_recovery_log(
     Get original strain
     """
 
-    strain = db.query(
-        StrainLog
-    ).filter(
-        StrainLog.id
-        == session.strain_log_id
-    ).first()
+    pre_score = 0
+    strain = None
 
-    if not strain:
-        raise ValueError(
-            "Strain log not found"
-        )
+    if session.strain_log_id:
+        strain = db.query(
+            StrainLog
+        ).filter(
+            StrainLog.id
+            == session.strain_log_id
+        ).first()
+    else:
+        # Fallback to the user's latest strain log
+        strain = db.query(
+            StrainLog
+        ).filter(
+            StrainLog.user_id == user_id
+        ).order_by(
+            StrainLog.created_at.desc()
+        ).first()
 
-    pre_score = (
-        strain.strain_score
-    )
+    if strain:
+        pre_score = strain.strain_score
 
     """
     Convert feedback into recovery values

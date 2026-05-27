@@ -34,10 +34,19 @@ def companion_chat(
     )
 ):
 
-    # mock profile and insight
-    profile = current_user.profile
+    from app.adaptive_engine.models import BehavioralProfile
+    from app.insights.models import InsightLog
+
+    profile = (
+        db.query(BehavioralProfile)
+        .filter(BehavioralProfile.user_id == current_user.id)
+        .first()
+    )
     latest_insight = (
-        current_user.latest_insight
+        db.query(InsightLog)
+        .filter(InsightLog.user_id == current_user.id)
+        .order_by(InsightLog.created_at.desc())
+        .first()
     )
 
     conversation = process_conversation(

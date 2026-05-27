@@ -9,5 +9,8 @@ from app.notifications.models import NotificationLog
 from app.recovery_engine.models import RecoveryLog
 from app.adaptive_engine.models import BehavioralProfile
 from app.ai_companion.models import ConversationLog
+from app.focal_isolation.models import FocalIsolationSession
+from app.streaks.models import UserStreak
+from app.donations.models import DonationPrompt, DonationConfig
 
 

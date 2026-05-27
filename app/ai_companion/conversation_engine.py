@@ -16,7 +16,7 @@ def generate_companion_response(
     tone = determine_emotional_tone(
         strain_level="moderate",
         recovery_profile=(
-            profile.recovery_profile
+            profile.recovery_profile if profile else None
         )
     )
 

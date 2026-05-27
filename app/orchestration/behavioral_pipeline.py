@@ -18,6 +18,7 @@ from app.prediction.service import (
     predict_next_check_in
 )
 
+
 def process_behavioral_heartbeat(
     db,
     user_id,
@@ -41,81 +42,34 @@ def process_behavioral_heartbeat(
         contexts=contexts
     )
 
-    # process_notification(
-    #     db=db,
-    #     strain_log=strain
-    # )
-
-    # return {
-    #     "telemetry": telemetry,
-    #     "contexts": contexts,
-    #     "strain": strain
-    # }
     process_notification(
-    db=db,
-    strain_log=strain
-)
-
-    """
-    Predict next reminder
-    """
+        db=db,
+        strain_log=strain
+    )
 
     prediction = predict_next_check_in(
-
         strain_score=strain.strain_score
     )
 
-    # return {
-
-    #     "telemetry": telemetry,
-
-    #     "contexts": contexts,
-
-    #     "strain": strain,
-
-        
-
-    #     "next_check_in_minutes":
-    #         prediction[
-    #             "next_check_in_minutes"
-    #         ],
-
-    #     "message":
-    #         prediction[
-    #             "message"
-    #         ],
-
-    #     "strain_score":
-    #         strain.strain_score,
-
-    #     "strain_level":
-    #         strain.risk_level
-    # }
-
     return {
+        "telemetry": telemetry,
 
-    "telemetry": telemetry,
-
-    "contexts": [
-        c.context_name
-        for c in contexts
-    ],
-
-    "strain": strain,
-
-    "next_check_in_minutes":
-        prediction[
-            "next_check_in_minutes"
+        "contexts": [
+            c.context_name
+            for c in contexts
         ],
 
-    "message":
-        prediction[
-            "message"
-        ],
+        "strain": strain,
 
-    "strain_score":
-        strain.strain_score,
+        "next_check_in_minutes":
+            prediction["next_check_in_minutes"],
 
-    "strain_level":
-        strain.risk_level
-}
+        "message":
+            prediction["message"],
+
+        "strain_score":
+            strain.strain_score,
+
+        "strain_level":
+            strain.risk_level
+    }
