@@ -36,7 +36,15 @@ class RecoveryLog(Base):
         ForeignKey(
             "regulation_sessions.id"
         ),
-        nullable=False
+        nullable=True
+    )
+
+    focal_isolation_session_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey(
+            "focal_isolation_sessions.id"
+        ),
+        nullable=True
     )
 
     pre_strain_score = Column(

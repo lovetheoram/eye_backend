@@ -7,59 +7,54 @@ def generate_message(
     notification_type
 ):
     """
-    Bold, direct notification copy.
+    Focus Endurance System notification copy.
 
-    These messages are designed to feel
-    urgent and authoritative — not passive.
-    The user should feel compelled to act
-    immediately.
+    Designed to feel like intelligent detection,
+    not a timer ringing. Users should feel:
+    "The app noticed something."
     """
 
     templates = {
 
         NotificationType.CILIARY_THRESHOLD:
         (
-            "Ciliary muscle strain threshold "
-            "reached. Look away now."
+            "52 minutes of continuous activity "
+            "detected. 20-second reset recommended."
         ),
 
         NotificationType.HIGH_STRAIN_ALERT:
         (
-            "Your eyes have been locked "
-            "for too long. 20-second "
-            "reset incoming."
+            "You've been in a high-intensity "
+            "session. Restore focus now."
         ),
 
         NotificationType.RECOVERY_SUGGESTION:
         (
-            "Your focus pattern is "
-            "building strain. Quick reset?"
+            "Quick reset available."
         ),
 
         NotificationType.GENTLE_AWARENESS:
         (
-            "Your visual focus has held "
-            "steady for a while. Time "
-            "to break the lock."
+            "You've been focused for a while. "
+            "Quick recharge available."
         ),
 
         NotificationType.STREAK_MILESTONE:
         (
-            "You just hit a new streak "
-            "milestone. Your eyes thank you."
+            "You just hit a new focus streak "
+            "milestone. Keep the momentum going."
         ),
 
         NotificationType.GRATITUDE_PROMPT:
         (
-            "Your eye health streak is "
-            "going strong. Want to pay "
-            "it forward?"
+            "Your focus streak is going strong. "
+            "Want to support future development?"
         )
     }
 
     return templates.get(
         notification_type,
-        "Your eyes need a reset. Act now."
+        "Focus Battery dropping. Quick recharge available."
     )
 
 
@@ -74,25 +69,25 @@ def generate_title(
     titles = {
 
         NotificationType.CILIARY_THRESHOLD:
-            "⚠️ Eye Strain Alert",
+            "📉 Focus Quality Dropping",
 
         NotificationType.HIGH_STRAIN_ALERT:
-            "🔴 Strain Critical",
+            "⚡ Fatigue Risk Rising",
 
         NotificationType.RECOVERY_SUGGESTION:
-            "👁️ Quick Reset",
+            "⏳ Focus Window Ending",
 
         NotificationType.GENTLE_AWARENESS:
-            "👁️ Focus Check",
+            "🔋 Focus Battery Low",
 
         NotificationType.STREAK_MILESTONE:
             "🔥 Streak Milestone!",
 
         NotificationType.GRATITUDE_PROMPT:
-            "💙 Pay It Forward"
+            "💙 Support Eye Buddy"
     }
 
     return titles.get(
         notification_type,
-        "👁️ Eye Buddy"
+        "🔋 Eye Buddy"
     )

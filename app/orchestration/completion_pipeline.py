@@ -87,6 +87,7 @@ def process_session_completion(
     recovery_log = RecoveryLog(
         user_id=user_id,
         regulation_session_id=None,
+        focal_isolation_session_id=session.id,
         pre_strain_score=(
             _get_pre_strain_score(
                 db, session

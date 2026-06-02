@@ -11,7 +11,7 @@ def predict_next_check_in(
     if strain_score >= 80:
 
         return {
-            "next_check_in_minutes": 1,
+            "next_check_in_minutes": 30,
 
             "message":
                 "High eye strain detected. Look away from the screen and blink slowly."
@@ -20,7 +20,7 @@ def predict_next_check_in(
     elif strain_score >= 60:
 
         return {
-            "next_check_in_minutes": 1,
+            "next_check_in_minutes": 30,
 
             "message":
                 "Your eyes are under moderate stress. Relax focus for a few seconds."
@@ -29,7 +29,7 @@ def predict_next_check_in(
     elif strain_score >= 40:
 
         return {
-            "next_check_in_minutes": 1,
+            "next_check_in_minutes": 30,
 
             "message":
                 "Take a small visual reset break."
@@ -38,7 +38,7 @@ def predict_next_check_in(
     else:
 
         return {
-            "next_check_in_minutes": 1,
+            "next_check_in_minutes": 30,
 
             "message":
                 "Healthy visual flow detected. Remember to blink naturally."

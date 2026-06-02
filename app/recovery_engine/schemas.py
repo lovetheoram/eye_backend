@@ -1,11 +1,15 @@
 from pydantic import BaseModel
 
 
+from typing import Optional
+
 class RecoveryCreate(
     BaseModel
 ):
 
-    regulation_session_id: str
+    regulation_session_id: Optional[str] = None
+
+    focal_isolation_session_id: Optional[str] = None
 
     feedback: str
 
